@@ -12212,7 +12212,7 @@ Standard deviation of prices: $165,171.13
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer: </strong></p>
-<p>The benefit of splitting the data into training data and testing data is that it will allow me to test the model that is developed on data that was not used to train the model.  Having a reasonable amount of test data will prevent overfitting due to the model memorizing the data.  However, a large amount of training data is also important so that the model does not underfit the data.</p>
+<p>The benefit of splitting the data into training data and testing data is that it will allow me to test the model that is developed on data that was not used to train the model.  This is important so that I can verify that my model will make good predictions on data that it has not seen during training.  In other words, testing with a test set that is separate from my training set will allow me to confirm that my model generalizes well.</p>
 
 </div>
 </div>
@@ -13889,8 +13889,8 @@ The depth of a decision tree would be a parameter that can be evaluated using a 
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer: </strong></p>
-<p>K-fold cross-validation is a technique in which the data is split into k buckets.  The data is trained and tested k times, each time using one of the buckets as the test data and all others at the training data.
-This technique allows more of the data to be used for training while still testing thoroughly.  This makes development of the models less succepbtible to anamolies in small data sets.</p>
+<p>K-fold cross-validation is a technique in which the training data is split into k buckets.  The model is trained and validated k times, each time using one of the buckets as the validation data and all others at the training data.  The default k-fold method in sklearn will split the data sequentially.  The score of each model will be averaged at the end of the k trials.
+This technique ensures that all training data will be used in the training of the model in the majority of the trials, which makes development of the models less succepbtible to anamolies in the data.</p>
 
 </div>
 </div>
@@ -13926,7 +13926,7 @@ For the <code>fit_model</code> function in the code cell below, you will need to
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[26]:</div>
+<div class="prompt input_prompt">In&nbsp;[31]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO: Import &#39;make_scorer&#39;, &#39;DecisionTreeRegressor&#39;, and &#39;GridSearchCV&#39;</span>
@@ -13947,7 +13947,7 @@ For the <code>fit_model</code> function in the code cell below, you will need to
     <span class="n">regressor</span> <span class="o">=</span> <span class="n">DecisionTreeRegressor</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="c1"># TODO: Create a dictionary for the parameter &#39;max_depth&#39; with a range from 1 to 10</span>
-    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;max_depth&#39;</span><span class="p">:</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)}</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;max_depth&#39;</span><span class="p">:</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">)}</span>
 
     <span class="c1"># TODO: Transform &#39;performance_metric&#39; into a scoring function using &#39;make_scorer&#39; </span>
     <span class="n">scoring_fnc</span> <span class="o">=</span> <span class="n">make_scorer</span><span class="p">(</span><span class="n">performance_metric</span><span class="p">)</span>
@@ -13992,7 +13992,7 @@ For the <code>fit_model</code> function in the code cell below, you will need to
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[27]:</div>
+<div class="prompt input_prompt">In&nbsp;[32]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Fit the training data to the model using grid search</span>
@@ -14031,7 +14031,7 @@ For the <code>fit_model</code> function in the code cell below, you will need to
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong> Hint: </strong> The answer comes from the output of the code snipped above.</p>
 <p><strong>Answer: </strong></p>
-<p>The optimal max depth for the decision tree regressor is 5.</p>
+<p>The optimal max depth for the decision tree regressor is 5.  My guess in question 6 was that max depth of 4 was the best model, but the scores for max depth of 4 and 5 were extremely close on the complexity performance plot so I do not see any problem with this outcome.</p>
 
 </div>
 </div>
@@ -14082,7 +14082,7 @@ For the <code>fit_model</code> function in the code cell below, you will need to
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[28]:</div>
+<div class="prompt input_prompt">In&nbsp;[33]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Produce a matrix for client data</span>
@@ -14125,7 +14125,8 @@ Predicted selling price for Client 3&#39;s home: $927,500.00
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer: </strong></p>
-<p>The output of the predictions are that client 1's house will sell for $419,700, client 2's house will sell for $287,100, and client 3's house will sell for $927,500.  These values seem reasonable that client 3's home would rank the best in all categories of number of rooms, poverty rate in the neighborhood, and student to teacher ratio at the nearby schools, while client 2's home would be the worst of these three homes in all of those categories.</p>
+<p>The output of the predictions are that client 1's house will sell for \$419,700, client 2's house will sell for \$287,100, and client 3's house will sell for \$927,500.
+These values seem reasonable. Client 3's home ranks the highly in all categories of number of rooms, poverty rate in the neighborhood, and student to teacher ratio at the nearby schools and its predicted price is close to the maximum price of \$1,024,800 found in the data exploration section.  Client 2's home ranks poorly in all categories and its predicted price is closer to the minimum value of \$105,000.  Client 1's home is in the middle on all categories and its predicted price is close to the median value of all homes in the data set.</p>
 
 </div>
 </div>
@@ -14142,7 +14143,7 @@ Predicted selling price for Client 3&#39;s home: $927,500.00
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[29]:</div>
+<div class="prompt input_prompt">In&nbsp;[34]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">vs</span><span class="o">.</span><span class="n">PredictTrials</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">prices</span><span class="p">,</span> <span class="n">fit_model</span><span class="p">,</span> <span class="n">client_data</span><span class="p">)</span>
