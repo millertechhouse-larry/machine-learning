@@ -14287,7 +14287,7 @@ IKSJ6m9n+AAAAABJRU5ErkJggg==
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer:</strong></p>
-<p>Based on the density plots, the data appears to have a truncated normal distribution for each feature with the mode being fairly close to zero relative to the maximum value of monitary units for each feature for certain customers.  The mode of the data for each feature is 10,000 monetary units or less but there maximum values for each feature are bewtween approximately 50,000 and 120,000 monetary units.  Based on the scatter plots, it is clear that the majority of the customers are spend a small amount of money on most of the catagories of products, but there are a few outliers that spend a very large amount of money on these categories of product.</p>
+<p>Based on the density plots, the data positively skewed distribution for each feature.  The mode of the data for each feature is 10,000 monetary units or less but there maximum values for each feature are bewtween approximately 50,000 and 120,000 monetary units.  Based on the scatter plots, it is clear that the majority of the customers are spend a small amount of money on most of the catagories of products, but there are a few outliers that spend a very large amount of money on these categories of product.</p>
 <p>By examining the scatter plots and the heat map of data.corr(), I can see that there are a few features which have some correlation.  The most highly-correlated pair of features is Grocery and Detergents_Paper.  The correlation value for this pair is 0.92 and the scatter plot shows a linear relationship between those features with a tight grouping around what would be a best-fit line.</p>
 <p>The Milk feature also shows a moderate amount of correlation with both Grocery and Detergents_Paper.  The correlation value for Milk and Grocery is 0.72 and the correlation value for Milk and Detergents_Paper is 0.66.  It is expected that Milk has a similar amount of correlation with both Grcery and Detergents_Paper since those two features are highly correlated with each other.</p>
 <p>My earlier suspicions about the Milk feature was that it has a small amount of correlation with other features based on the fact that I couldn't make a very good prediction about the value of Milk using the other features with a decision tree regressor.  However, using the corr function shows me that there is actually a moderate amount of correlation with this data and other features, and therefore the Milk feature has slightly less relevance than some of the other features in the set that don't correlate with any of the other features.</p>
@@ -19406,7 +19406,7 @@ Data points considered outliers for the feature &#39;Delicatessen&#39;:
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[64]:</div>
+<div class="prompt input_prompt">In&nbsp;[74]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="kn">import</span> <span class="n">PCA</span>
@@ -19420,6 +19420,8 @@ Data points considered outliers for the feature &#39;Delicatessen&#39;:
 
 <span class="c1"># Generate PCA results plot</span>
 <span class="n">pca_results</span> <span class="o">=</span> <span class="n">vs</span><span class="o">.</span><span class="n">pca_results</span><span class="p">(</span><span class="n">good_data</span><span class="p">,</span> <span class="n">pca</span><span class="p">)</span>
+
+<span class="k">print</span> <span class="n">pca_results</span><span class="p">[</span><span class="s1">&#39;Explained Variance&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span>
 </pre></div>
 
 </div>
@@ -19429,6 +19431,23 @@ Data points considered outliers for the feature &#39;Delicatessen&#39;:
 <div class="output_wrapper">
 <div class="output">
 
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Dimension 1    0.4430
+Dimension 2    0.7068
+Dimension 3    0.8299
+Dimension 4    0.9311
+Dimension 5    0.9796
+Dimension 6    1.0000
+Name: Explained Variance, dtype: float64
+</pre>
+</div>
+</div>
 
 <div class="output_area">
 
@@ -19776,10 +19795,10 @@ QmCC
 <p><strong>Answer:</strong></p>
 <p>The first and second components explain 71% of the variance in the data.</p>
 <p>The first four principal components explain 93% of the variance in the data.</p>
-<p>The first principal component explains 44% of the variance in the data.  It is most significantly represented by the Detergents_Paper feature which explains negative variance.  The first component is also represented by the Milk and Grocery features to a lesser, but still significant, extent.  These features also explain negative variance in the data.  This dimension is essentially a measure of how little Detergents_Paper, Milk, and Grocery each customer purchases.  A customer that purchases a very large amount of these categories would show up close to zero in this dimension.</p>
-<p>The second prinicpal component explains 26% of the variance of the data.  Since principle components are orthogonal, it is not a surprise that Detergents_Paper, Milk, and Grocery are insignificant contributors to this component and the Fresh, Frozen, and Delicatessen features are represented significantly.  These three features explain negative variance in the data for this component.  This dimension represents how little Fresh, Frozen, and Delicatessen items customers purchase.</p>
-<p>The third priniciple component explains 12% of the variance in the data.  It is primarly a combination of Fresh explaining negative variance in this component and Delicatessan explaining positive variance, with lesser representation from Frozen and Detergents_Paper.  Customers with a high value in this diemsnsion purchase a small amount of Fresh items and a large amount of Delicatessen and Frozen items.</p>
-<p>The fourth prinicple component explains 10% of the variance in the data.  This component is primarily a combination of the Frozen feature with a high positive weight and the Delicatessen feature with a high negative weight.  Therefore customers that purchase a large amount of Frozen items and a very small amount of Delicatessen items would have a large value in this dimension.</p>
+<p>The first principal component explains 44% of the variance in the data.  It is most significantly represented by the Detergents_Paper feature which explains negative variance.  The first component is also represented by the Milk and Grocery features to a lesser, but still significant, extent.  These features also explain negative variance in the data.  This dimension is essentially a measure of how little Detergents_Paper, Milk, and Grocery each customer purchases.  A customer that purchases a very large amount of these categories would show up close to zero in this dimension.  Spending on Detergents_Paper, Milk, and Grocery categories would indicate that a customer is in the retail space and likely not selling prepared food.</p>
+<p>The second prinicpal component explains 26% of the variance of the data.  Since principle components are orthogonal, it is not a surprise that Detergents_Paper, Milk, and Grocery are insignificant contributors to this component and the Fresh, Frozen, and Delicatessen features are represented significantly.  These three features explain negative variance in the data for this component.  This dimension represents how little Fresh, Frozen, and Delicatessen items customers purchase.  Spending on Fresh and Delicatessen items, and to a lesser extent Frozen items, would indicate that a customer is selling prepared foods and is possibly a restaurant or cafe.</p>
+<p>The third priniciple component explains 12% of the variance in the data.  It is primarly a combination of Fresh explaining negative variance in this component and Delicatessan explaining positive variance, with lesser representation from Frozen and Detergents_Paper.  Customers with a high value in this diemsnsion purchase a small amount of Fresh items and a large amount of Delicatessen and Frozen items.  This dimension is likely a distinguisher of the type of establishement that the customer runs.  For instance a cafe may have high Delicatessen spending, but lower Fresh spending whereas a restaurant would likely have the opposite pattern.</p>
+<p>The fourth prinicple component explains 10% of the variance in the data.  This component is primarily a combination of the Frozen feature with a high positive weight and the Delicatessen feature with a high negative weight.  Therefore customers that purchase a large amount of Frozen items and a very small amount of Delicatessen items would have a large value in this dimension.  I would expect certain higher end establishments might spend very little on Frozen items and higher amounts on Delicatessen items, while lower end establishments might spend more on Frozen items and less on Delicatessen items.</p>
 <p>The fifth principal component explains 5% of the variance in the data.  This component is mainly a combination of a highly positive weight of Milk, a less positive weight of Grocery, and a very negative weight of Detergents_Paper.  Thus customers that purchase a large amount of Milk and Grocery and a very small amount of Detergents_Paper have a large value for this component.</p>
 <p>Finally, the sixth principal component explains only 2% of the variance in the data.  This component is a combination of a highly positive weight for Grocery and a highly negative weight for Milk.  Although this dimension is negligable when it comes to explaining data, customers that purchase a high amount of Grocery and a low amount of Milk would have a high value in this dimension.</p>
 
@@ -22251,6 +22270,7 @@ Sample point 2 predicted to be in Cluster 0
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer:</strong></p>
 <p>I expect that restaurants would react negatively to changing the delivery service to 3 days per week.  They purchase more fresh food and likely have less room for storage.  The grocery stores, on the other hand, would be more tolerant of this and may react positively since they would be able to save time receiving their items and stocking their shelves.</p>
+<p>The distributor could run an A/B test on each segment to confirm this assumption.  The process for doing this would be to randomly select a sample of the customers in each segment, switch to delivery once every three days per week for those selected customers, and then ask all customers if they are satisfied with the frequency of their delivery.  Each segment can then be analyzed separately to see what the impact of changing the frequency of delivery from 5 days per week to 3 days per week will be.  The size of the sample that is selected for testing the change needs to be large enough to make the observation of the reaction to the change statistically significant.  50% of the customers in each segment would be ideal, but anything more than 10% would be sufficient if the distributor would rather make this change for fewer customers before they assess the impact.</p>
 
 </div>
 </div>
