@@ -44,8 +44,8 @@ class LearningAgent(Agent):
             self.alpha = 0
         else:
             #self.epsilon -= 0.05 #linear decay
-            self.epsilon = self.epsilon * 0.997
-            self.alpha = self.alpha * 0.999
+            self.epsilon = self.epsilon * 0.995
+            self.alpha = self.alpha * 0.998
 
         return None
 
@@ -69,7 +69,7 @@ class LearningAgent(Agent):
         # With the hand-engineered features, this learning process gets entirely negated.
         
         # Set 'state' as a tuple of relevant data for the agent        
-        state = ( waypoint, inputs['light'], inputs['left'], inputs['right'], inputs['oncoming'] )
+        state = ( waypoint, inputs['light'], inputs['left'], inputs['oncoming'] )
 
         return state
 
@@ -82,30 +82,31 @@ class LearningAgent(Agent):
         ## TO DO ##
         ###########
         # Calculate the maximum Q-value of all actions for a given state
-        # would like to call max( self.Q[state], key=self.Q[state].get ), 
-        # but this does not randomly choose in the event of a tie
         firstLoop = True
-        maxVal = 0
-        keyList = list()
+        maxQ = 0
         for key in self.Q[state]:
             currentVal = self.Q[state][key]
             if firstLoop:  # first time through the loop set maxVal to whatever value is first
-                maxVal = currentVal
-                keyList.append(key)
+                maxQ = currentVal
                 firstLoop = False
             else:  ## all other times through the loop check to see if current value > maxVal
-                if maxVal < currentVal:
+                if maxQ < currentVal:
                     # found a new max value
-                    maxVal = currentVal
-                    keyList = []
-                    keyList.append(key)
-                elif maxVal == currentVal:
-                    # currentVal ties maxVal
-                    keyList.append(key)
-        #randomly choose between all keys that had the max value
-        maxQ = random.choice(keyList)
+                    maxQ = currentVal
 
         return maxQ
+    
+    def get_maxQ_action(self, state):
+        # randomly choose an action until one with a value of maxQ is found
+        maxQVal = self.get_maxQ(state)
+        act = list(self.valid_actions)
+        while len(act) > 0:
+            currentAction = random.choice(act)
+            if self.Q[state][currentAction] == maxQVal:
+                return currentAction
+            else:
+                act.remove(currentAction)
+        return None
 
 
     def createQ(self, state):
@@ -144,7 +145,7 @@ class LearningAgent(Agent):
             if random.random() <= self.epsilon:
                 action = random.choice( self.valid_actions )
             else:
-                action = self.get_maxQ( state )
+                action = self.get_maxQ_action( state )
         else:
             action = random.choice( self.valid_actions )
         return action
@@ -215,7 +216,7 @@ def run():
     #   display      - set to False to disable the GUI if PyGame is enabled
     #   log_metrics  - set to True to log trial and simulation results to /logs
     #   optimized    - set to True to change the default log file name
-    sim = Simulator(env, update_delay=.02, log_metrics=true, optimized=True)
+    sim = Simulator(env, update_delay=.01, log_metrics=True, optimized=True)
     
     ##############
     # Run the simulator
